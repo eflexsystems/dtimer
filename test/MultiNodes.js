@@ -4,7 +4,7 @@ var DTimer = require('..').DTimer;
 var async = require('async');
 var assert = require('assert');
 var Promise = require('bluebird');
-var redis = Promise.promisifyAll(require("redis"));
+var redis = require('ioredis');
 
 describe('Multiple nodes', function () {
     var numNodes = 8;

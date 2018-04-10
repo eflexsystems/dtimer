@@ -4,7 +4,7 @@ var DTimer = require('..').DTimer;
 var assert = require('assert');
 var sinon = require('sinon');
 var Promise = require('bluebird');
-var redis = Promise.promisifyAll(require("redis"));
+var redis = require('ioredis');
 
 describe('ApiTests', function () {
     var sandbox = sinon.sandbox.create();

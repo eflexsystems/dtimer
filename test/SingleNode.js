@@ -5,7 +5,7 @@ var async = require('async');
 var assert = require('assert');
 var debug = require('debug')('dtimer');
 var Promise = require('bluebird');
-var redis = Promise.promisifyAll(require("redis"));
+var redis = require('ioredis');
 
 describe('Single node', function () {
     var pub = null;

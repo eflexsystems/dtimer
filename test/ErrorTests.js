@@ -5,7 +5,7 @@ var async = require('async');
 var assert = require('assert');
 var sinon = require('sinon');
 var Promise = require('bluebird');
-var redis = Promise.promisifyAll(require("redis"));
+var redis = require('ioredis');
 
 describe('Error tests', function () {
     var pub = null;
@@ -60,10 +60,8 @@ describe('Error tests', function () {
         sandbox.restore();
     });
 
-    it('#join', function (done) {
-        sandbox.stub(pub, 'timeAsync', function () {
-            return Promise.reject(new Error('fail error'));
-        });
+    it.only('#join', function (done) {
+        sandbox.stub(pub, 'time').rejects(new Error('fail error'));
 
         dt.join(function (err) {
             assert.ok(err);
@@ -72,7 +70,7 @@ describe('Error tests', function () {
     });
 
     it('#leave', function (done) {
-        sandbox.stub(pub, 'timeAsync', function () {
+        sandbox.stub(pub, 'time', function () {
             return Promise.reject(new Error('fail error'));
         });
 
@@ -83,7 +81,7 @@ describe('Error tests', function () {
     });
 
     it('#post', function (done) {
-        sandbox.stub(pub, 'timeAsync', function () {
+        sandbox.stub(pub, 'time', function () {
             return Promise.reject(new Error('fail error'));
         });
 
@@ -94,7 +92,7 @@ describe('Error tests', function () {
     });
 
     it('#cancel', function (done) {
-        sandbox.stub(pub, 'timeAsync', function () {
+        sandbox.stub(pub, 'time', function () {
             return Promise.reject(new Error('fail error'));
         });
 
@@ -123,7 +121,7 @@ describe('Error tests', function () {
     });
 
     it('#confirm - error with time command', function (done) {
-        sandbox.stub(pub, 'timeAsync', function () {
+        sandbox.stub(pub, 'time', function () {
             return Promise.reject(new Error('fail error'));
         });
 
@@ -152,7 +150,7 @@ describe('Error tests', function () {
     });
 
     it('#changeDelay - error with time command', function (done) {
-        sandbox.stub(pub, 'timeAsync', function () {
+        sandbox.stub(pub, 'time', function () {
             return Promise.reject(new Error('fail error'));
         });
 
@@ -181,7 +179,7 @@ describe('Error tests', function () {
     });
 
     it('#_onTimeout', function (done) {
-        sandbox.stub(pub, 'timeAsync', function () {
+        sandbox.stub(pub, 'time', function () {
             return Promise.reject(new Error('fail error'));
         });
         dt.on('error', function (err) {
