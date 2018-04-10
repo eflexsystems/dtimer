@@ -4,7 +4,6 @@ var DTimer = require('..').DTimer;
 var async = require('async');
 var assert = require('assert');
 var debug = require('debug')('dtimer');
-var Promise = require('bluebird');
 var redis = require('ioredis');
 
 describe('Single node', function () {

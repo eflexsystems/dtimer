@@ -3,7 +3,6 @@
 var DTimer = require('..').DTimer;
 var assert = require('assert');
 var sinon = require('sinon');
-var Promise = require('bluebird');
 var redis = require('ioredis');
 
 describe('ApiTests', function () {

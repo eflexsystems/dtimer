@@ -60,8 +60,10 @@ describe('Error tests', function () {
         sandbox.restore();
     });
 
-    it.only('#join', function (done) {
-        sandbox.stub(pub, 'time').rejects(new Error('fail error'));
+    it('#join', function (done) {
+        sandbox.stub(pub, 'time', function () {
+            return Promise.reject(new Error('fail error'));
+        });
 
         dt.join(function (err) {
             assert.ok(err);
@@ -106,7 +108,7 @@ describe('Error tests', function () {
         sandbox.stub(pub, 'multi', function () {
             var multi = {
                 evalsha: function () { return multi; },
-                execAsync: function () {
+                exec: function () {
                     return Promise.reject(new Error('fake error'));
                 }
             };
@@ -135,7 +137,7 @@ describe('Error tests', function () {
         sandbox.stub(pub, 'multi', function () {
             var multi = {
                 evalsha: function () { return multi; },
-                execAsync: function () {
+                exec: function () {
                     return Promise.reject(new Error('fake error'));
                 }
             };
@@ -164,7 +166,7 @@ describe('Error tests', function () {
         sandbox.stub(pub, 'multi', function () {
             var multi = {
                 evalsha: function () { return multi; },
-                execAsync: function () {
+                exec: function () {
                     return Promise.reject(new Error('fake error'));
                 }
             };
@@ -199,7 +201,7 @@ describe('Error tests', function () {
                 hset:   function () { return this; },
                 hdel:   function () { return this; },
                 evalsha:function () { return this; },
-                execAsync: function () {
+                exec: function () {
                     return Promise.reject(new Error('fake err'));
                 },
             };
@@ -223,7 +225,7 @@ describe('Error tests', function () {
                 hset:   function () { return this; },
                 hdel:   function () { return this; },
                 evalsha:function () { return this; },
-                execAsync: function () {
+                exec: function () {
                     return Promise.reject(new Error('fake err'));
                 },
             };
@@ -247,7 +249,7 @@ describe('Error tests', function () {
                 hset:   function () { return this; },
                 hdel:   function () { return this; },
                 evalsha:function () { return this; },
-                execAsync: function () {
+                exec: function () {
                     return Promise.resolve(['ERR fakeed', 1, 1]);
                 },
             };
