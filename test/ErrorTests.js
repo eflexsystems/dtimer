@@ -277,16 +277,13 @@ describe('Error tests', function () {
         dt._onTimeout();
     });
 
-    it('#_onTimeout - evalsha error (2)', function (done) {
-        sandbox.stub(global, 'setTimeout', function (fn, interval) {
+    it.only('#_onTimeout - evalsha error (2)', function (done) {
+        sandbox.stub(global, 'setTimeout').callsFake(function (fn, interval) {
             assert(typeof fn === 'function');
             assert.equal(interval, 1234);
             done();
         });
-        sandbox.stub(pub, 'evalsha', function () {
-            var cb = arguments[11];
-            cb(null, [ ['{bad]'], 1234]);
-        });
+        sandbox.stub(pub, 'evalsha').resolves([ ['{bad]'], 1234]);
 
         dt._onTimeout();
     });
