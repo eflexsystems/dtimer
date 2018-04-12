@@ -278,14 +278,15 @@ describe('Error tests', function () {
     });
 
     it.only('#_onTimeout - evalsha error (2)', function (done) {
-        sandbox.stub(global, 'setTimeout').callsFake(function (fn, interval) {
-            assert(typeof fn === 'function');
-            assert.equal(interval, 1234);
-            done();
-        });
+        var setTimeoutSpy = sandbox.spy(global, 'setTimeout');
         sandbox.stub(pub, 'evalsha').resolves([ ['{bad]'], 1234]);
 
-        dt._onTimeout();
+        var promise = dt._onTimeout();
+        console.log("RMME: you promised", promise);
+        debugger;
+        promise.then(function () {
+            assert(setTimeoutSpy.calledWith(setTimeoutSpy.getCall(0).args[0], 1234));
+        });
     });
 
     describe('#upcoming', function () {
