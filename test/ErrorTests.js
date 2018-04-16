@@ -7,7 +7,7 @@ var sinon = require('sinon');
 var Promise = require('bluebird');
 var redis = require('ioredis');
 
-describe.only('Error tests', function () {
+describe('Error tests', function () {
     var pub = null;
     var sub = null;
     var dt  = null;
@@ -107,7 +107,8 @@ describe.only('Error tests', function () {
     it('#cancel - multi error', function (done) {
         sandbox.stub(pub, 'multi').callsFake(function () {
             var multi = {
-                evalsha: function () { return multi; },
+                cancel: function () { return multi; },
+                update: function () { return multi; },
                 exec: function () {
                     return Promise.reject(new Error('fake error'));
                 }
@@ -136,7 +137,8 @@ describe.only('Error tests', function () {
     it('#confirm - multi error', function (done) {
         sandbox.stub(pub, 'multi').callsFake(function () {
             var multi = {
-                evalsha: function () { return multi; },
+                cancel: function () { return multi; },
+                update: function () { return multi; },
                 exec: function () {
                     return Promise.reject(new Error('fake error'));
                 }
@@ -165,7 +167,8 @@ describe.only('Error tests', function () {
     it('#changeDelay - multi error', function (done) {
         sandbox.stub(pub, 'multi').callsFake(function () {
             var multi = {
-                evalsha: function () { return multi; },
+                changeDelay: function () { return multi; },
+                update: function () { return multi; },
                 exec: function () {
                     return Promise.reject(new Error('fake error'));
                 }
@@ -200,7 +203,7 @@ describe.only('Error tests', function () {
                 zrem:   function () { return this; },
                 hset:   function () { return this; },
                 hdel:   function () { return this; },
-                evalsha:function () { return this; },
+                update: function () { return this; },
                 exec: function () {
                     return Promise.reject(new Error('fake err'));
                 },
@@ -224,7 +227,7 @@ describe.only('Error tests', function () {
                 zrem:   function () { return this; },
                 hset:   function () { return this; },
                 hdel:   function () { return this; },
-                evalsha:function () { return this; },
+                update: function () { return this; },
                 exec: function () {
                     return Promise.reject(new Error('fake err'));
                 },
@@ -248,7 +251,7 @@ describe.only('Error tests', function () {
                 zrem:   function () { return this; },
                 hset:   function () { return this; },
                 hdel:   function () { return this; },
-                evalsha:function () { return this; },
+                update: function () { return this; },
                 exec: function () {
                     return Promise.resolve(['ERR fakeed', 1, 1]);
                 },
@@ -263,8 +266,8 @@ describe.only('Error tests', function () {
         });
     });
 
-    it('#_onTimeout - evalsha error', function (done) {
-        sandbox.stub(pub, 'evalsha').rejects(new Error('fail error'));
+    it('#_onTimeout - update error', function (done) {
+        sandbox.stub(pub, 'update').rejects(new Error('fail error'));
 
         dt._onTimeout().catch(function (err) {
             assert.ok(err);
@@ -272,9 +275,9 @@ describe.only('Error tests', function () {
         });
     });
 
-    it('#_onTimeout - evalsha error (2)', function (done) {
+    it('#_onTimeout - update error (2)', function (done) {
         var setTimeoutSpy = sandbox.spy(global, 'setTimeout');
-        sandbox.stub(pub, 'evalsha').usingPromise(Promise).resolves([ ['{bad]'], 1234]);
+        sandbox.stub(pub, 'update').usingPromise(Promise).resolves([ ['{bad]'], 1234]);
 
         dt._onTimeout().then(function () {
             assert(setTimeoutSpy.calledWith(setTimeoutSpy.getCall(0).args[0], 1234));
