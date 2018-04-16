@@ -263,7 +263,7 @@ describe('Error tests', function () {
         });
     });
 
-    it.only('#_onTimeout - evalsha error', function (done) {
+    it('#_onTimeout - evalsha error', function (done) {
         sandbox.stub(pub, 'evalsha').rejects(new Error('fail error'));
 
         dt._onTimeout().catch(function (err) {
