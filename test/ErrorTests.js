@@ -7,7 +7,7 @@ var sinon = require('sinon');
 var Promise = require('bluebird');
 var redis = require('ioredis');
 
-describe('Error tests', function () {
+describe.only('Error tests', function () {
     var pub = null;
     var sub = null;
     var dt  = null;
@@ -61,7 +61,7 @@ describe('Error tests', function () {
     });
 
     it('#join', function (done) {
-        sandbox.stub(pub, 'time', function () {
+        sandbox.stub(pub, 'time').callsFake(function () {
             return Promise.reject(new Error('fail error'));
         });
 
@@ -72,7 +72,7 @@ describe('Error tests', function () {
     });
 
     it('#leave', function (done) {
-        sandbox.stub(pub, 'time', function () {
+        sandbox.stub(pub, 'time').callsFake(function () {
             return Promise.reject(new Error('fail error'));
         });
 
@@ -83,7 +83,7 @@ describe('Error tests', function () {
     });
 
     it('#post', function (done) {
-        sandbox.stub(pub, 'time', function () {
+        sandbox.stub(pub, 'time').callsFake(function () {
             return Promise.reject(new Error('fail error'));
         });
 
@@ -94,7 +94,7 @@ describe('Error tests', function () {
     });
 
     it('#cancel', function (done) {
-        sandbox.stub(pub, 'time', function () {
+        sandbox.stub(pub, 'time').callsFake(function () {
             return Promise.reject(new Error('fail error'));
         });
 
@@ -105,7 +105,7 @@ describe('Error tests', function () {
     });
 
     it('#cancel - multi error', function (done) {
-        sandbox.stub(pub, 'multi', function () {
+        sandbox.stub(pub, 'multi').callsFake(function () {
             var multi = {
                 evalsha: function () { return multi; },
                 exec: function () {
@@ -123,7 +123,7 @@ describe('Error tests', function () {
     });
 
     it('#confirm - error with time command', function (done) {
-        sandbox.stub(pub, 'time', function () {
+        sandbox.stub(pub, 'time').callsFake(function () {
             return Promise.reject(new Error('fail error'));
         });
 
@@ -134,7 +134,7 @@ describe('Error tests', function () {
     });
 
     it('#confirm - multi error', function (done) {
-        sandbox.stub(pub, 'multi', function () {
+        sandbox.stub(pub, 'multi').callsFake(function () {
             var multi = {
                 evalsha: function () { return multi; },
                 exec: function () {
@@ -152,7 +152,7 @@ describe('Error tests', function () {
     });
 
     it('#changeDelay - error with time command', function (done) {
-        sandbox.stub(pub, 'time', function () {
+        sandbox.stub(pub, 'time').callsFake(function () {
             return Promise.reject(new Error('fail error'));
         });
 
@@ -163,7 +163,7 @@ describe('Error tests', function () {
     });
 
     it('#changeDelay - multi error', function (done) {
-        sandbox.stub(pub, 'multi', function () {
+        sandbox.stub(pub, 'multi').callsFake(function () {
             var multi = {
                 evalsha: function () { return multi; },
                 exec: function () {
@@ -181,7 +181,7 @@ describe('Error tests', function () {
     });
 
     it('#_onTimeout', function (done) {
-        sandbox.stub(pub, 'time', function () {
+        sandbox.stub(pub, 'time').callsFake(function () {
             return Promise.reject(new Error('fail error'));
         });
         dt.on('error', function (err) {
@@ -192,7 +192,7 @@ describe('Error tests', function () {
     });
 
     it('#join - multi error', function (done) {
-        sandbox.stub(pub, 'multi', function () {
+        sandbox.stub(pub, 'multi').callsFake(function () {
             var m = {
                 lrem:   function () { return this; },
                 lpush:  function () { return this; },
@@ -216,7 +216,7 @@ describe('Error tests', function () {
     });
 
     it('#post - multi error', function (done) {
-        sandbox.stub(pub, 'multi', function () {
+        sandbox.stub(pub, 'multi').callsFake(function () {
             var m = {
                 lrem:   function () { return this; },
                 lpush:  function () { return this; },
@@ -240,7 +240,7 @@ describe('Error tests', function () {
     });
 
     it('#post - multi (in-result) error', function (done) {
-        sandbox.stub(pub, 'multi', function () {
+        sandbox.stub(pub, 'multi').callsFake(function () {
             var m = {
                 lrem:   function () { return this; },
                 lpush:  function () { return this; },
@@ -263,7 +263,7 @@ describe('Error tests', function () {
         });
     });
 
-    it.only('#_onTimeout - evalsha error', function (done) {
+    it('#_onTimeout - evalsha error', function (done) {
         sandbox.stub(pub, 'evalsha').rejects(new Error('fail error'));
 
         dt._onTimeout().catch(function (err) {
@@ -288,7 +288,7 @@ describe('Error tests', function () {
         });
 
         it('force _redisTime return error', function (done) {
-            sandbox.stub(dt, '_redisTime', function (c) {
+            sandbox.stub(dt, '_redisTime').callsFake(function (c) {
                 void(c);
                 return Promise.reject(new Error('fake error'));
             });
@@ -299,10 +299,8 @@ describe('Error tests', function () {
         });
 
         it('force _pub.zrangebyscoreAsync return error', function (done) {
-            sandbox.stub(dt._pub, 'zrangebyscoreAsync', function (args) {
-                void(args);
-                return Promise.reject(new Error('fake error'));
-            });
+            sandbox.stub(dt._pub, 'zrangebyscore').rejects(new Error('fake error'));
+
             dt.upcoming(function (err) {
                 assert.ok(err);
                 done();
@@ -315,10 +313,7 @@ describe('Error tests', function () {
                     dt.post({ msg: 'bye' }, 1000, next);
                 },
                 function (next) {
-                    sandbox.stub(dt._pub, 'hmgetAsync', function (args) {
-                        void(args);
-                        return Promise.reject(new Error('fake error'));
-                    });
+                    sandbox.stub(dt._pub, 'hmget').rejects(new Error('fake error'));
 
                     dt.upcoming(function (err) {
                         assert.ok(err);
