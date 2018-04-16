@@ -263,29 +263,22 @@ describe('Error tests', function () {
         });
     });
 
-    it('#_onTimeout - evalsha error', function (done) {
-        sandbox.stub(global, 'setTimeout', function (fn, interval) {
-            assert(typeof fn === 'function');
-            assert.equal(interval, 3000);
+    it.only('#_onTimeout - evalsha error', function (done) {
+        sandbox.stub(pub, 'evalsha').rejects(new Error('fail error'));
+
+        dt._onTimeout().catch(function (err) {
+            assert.ok(err);
             done();
         });
-        sandbox.stub(pub, 'evalsha', function () {
-            var cb = arguments[11];
-            cb(new Error('fail error'));
-        });
-
-        dt._onTimeout();
     });
 
-    it.only('#_onTimeout - evalsha error (2)', function (done) {
+    it('#_onTimeout - evalsha error (2)', function (done) {
         var setTimeoutSpy = sandbox.spy(global, 'setTimeout');
-        sandbox.stub(pub, 'evalsha').resolves([ ['{bad]'], 1234]);
+        sandbox.stub(pub, 'evalsha').usingPromise(Promise).resolves([ ['{bad]'], 1234]);
 
-        var promise = dt._onTimeout();
-        console.log("RMME: you promised", promise);
-        debugger;
-        promise.then(function () {
+        dt._onTimeout().then(function () {
             assert(setTimeoutSpy.calledWith(setTimeoutSpy.getCall(0).args[0], 1234));
+            done();
         });
     });
 
