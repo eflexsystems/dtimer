@@ -49,6 +49,7 @@ describe('Error tests', function () {
     });
 
     afterEach(function () {
+        clearTimeout(dt._timer);
         dt.removeAllListeners();
         dt = null;
         pub.removeAllListeners();
@@ -301,7 +302,7 @@ describe('Error tests', function () {
             });
         });
 
-        it('force _pub.zrangebyscoreAsync return error', function (done) {
+        it('force _pub.zrangebyscore return error', function (done) {
             sandbox.stub(dt._pub, 'zrangebyscore').rejects(new Error('fake error'));
 
             dt.upcoming(function (err) {
@@ -310,7 +311,7 @@ describe('Error tests', function () {
             });
         });
 
-        it('force _pub.hmgetAsync return error', function (done) {
+        it('force _pub.hmget return error', function (done) {
             async.series([
                 function (next) {
                     dt.post({ msg: 'bye' }, 1000, next);

@@ -46,6 +46,7 @@ describe('Single node', function () {
     });
 
     afterEach(function () {
+        clearTimeout(dt._timer);
         dt.removeAllListeners();
         dt = null;
         pub.removeAllListeners();

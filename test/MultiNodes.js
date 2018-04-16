@@ -58,6 +58,7 @@ describe('Multiple nodes', function () {
 
     afterEach(function () {
         nodes.forEach(function (node) {
+            clearTimeout(node.dt._timer);
             node.dt.removeAllListeners();
             node.dt = null;
             node.pub.removeAllListeners();
