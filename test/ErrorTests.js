@@ -267,7 +267,7 @@ describe('Error tests', function () {
         });
     });
 
-    it.only('#_onTimeout - update error', function (done) {
+    it.skip('#_onTimeout - update error', function (done) {
         sandbox.stub(pub, 'update').rejects(new Error('fail error'));
 
         dt._onTimeout().catch(function (err) {
