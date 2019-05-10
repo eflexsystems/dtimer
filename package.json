@@ -1,6 +1,6 @@
 {
   "name": "eflex-dtimer",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Distributed timer backed by Redis.",
   "main": "index.js",
   "scripts": {
