@@ -1,6 +1,6 @@
 {
   "name": "@eflexsystems/dtimer",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "Distributed timer backed by Redis.",
   "main": "index.js",
   "scripts": {
@@ -15,10 +15,10 @@
   "dependencies": {
     "bluebird": "^3.5.1",
     "debug": "^4.0.1",
-    "ioredis": "^4.0.0",
+    "ioredis": "^4.0.3",
     "lured": "^1.0.3",
     "underscore": "^1.9.1",
-    "uuid": "^7.0.2"
+    "uuid": "^8.0.0"
   },
   "devDependencies": {
     "async": "^2.6.1",
